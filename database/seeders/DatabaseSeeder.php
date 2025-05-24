@@ -2,8 +2,8 @@
 
 namespace Database\Seeders;
 
+use App\Models\Company;
 use App\Models\User;
-// use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
@@ -13,11 +13,7 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // User::factory(10)->create();
-
-        User::factory()->create([
-            'name' => 'Test User',
-            'email' => 'test@example.com',
-        ]);
+        Company::factory(1000)->create()->each(fn (Company $company) => $company->users()
+            ->createMany(User::factory(50)->make()->map->getAttributes()));
     }
 }
