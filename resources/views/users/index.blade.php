@@ -68,7 +68,7 @@
                   <td
                     class="whitespace-no-wrap border-b border-gray-200 px-6 py-4 text-sm leading-5 text-gray-500"
                   >
-                    {{ $user->logins()->latest()->first()->created_at->diffForHumans() }}
+                    {{ $user->logins->sortByDesc('created_at')->first()->created_at->diffForHumans() }}
                   </td>
                   <td
                     class="whitespace-no-wrap border-b border-gray-200 px-6 py-4 text-right text-sm leading-5 font-medium"
