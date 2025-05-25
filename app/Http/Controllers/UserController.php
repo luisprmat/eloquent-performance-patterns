@@ -10,6 +10,7 @@ class UserController extends Controller
     public function index(): View
     {
         $users = User::query()
+            ->with('company')
             ->simplePaginate();
 
         return view('users.index', ['users' => $users]);
