@@ -3,6 +3,8 @@
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
+
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -50,5 +52,15 @@ class User extends Authenticatable
     public function logins(): HasMany
     {
         return $this->hasMany(Login::class);
+    }
+
+    public function scopeWithLastLoginAt(Builder $query)
+    {
+        $query->addSelect(['last_login_at' => Login::select('created_at')
+            ->whereColumn('user_id', 'users.id')
+            ->latest()
+            ->take(1),
+        ])
+            ->withCasts(['last_login_at' => 'datetime']);
     }
 }
