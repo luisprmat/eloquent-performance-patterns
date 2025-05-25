@@ -10,7 +10,8 @@ class PostController extends Controller
     public function index(): View
     {
         $years = Post::query()
-            ->with('author')
+            ->select('id', 'title', 'slug', 'published_at', 'author_id')
+            ->with('author:id,name')
             ->latest('published_at')
             ->get()
             ->groupBy(fn (Post $post) => $post->published_at->year);
