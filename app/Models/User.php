@@ -63,4 +63,13 @@ class User extends Authenticatable
         ])
             ->withCasts(['last_login_at' => 'datetime']);
     }
+
+    public function scopeWithLastLoginIpAddress(Builder $query)
+    {
+        $query->addSelect(['last_login_ip_address' => Login::select('ip_address')
+            ->whereColumn('user_id', 'users.id')
+            ->latest()
+            ->take(1),
+        ]);
+    }
 }
