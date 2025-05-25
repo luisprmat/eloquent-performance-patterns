@@ -44,6 +44,11 @@
                 >
                   {{ __('Email') }}
                 </th>
+                <th
+                  class="border-b border-gray-200 bg-gray-50 px-6 py-3 text-left text-xs leading-4 font-medium tracking-wider text-gray-500 uppercase"
+                >
+                  {{ __('Last Login') }}
+                </th>
                 <th class="border-b border-gray-200 bg-gray-50 px-6 py-3"></th>
               </tr>
             </thead>
@@ -59,6 +64,11 @@
                     class="whitespace-no-wrap border-b border-gray-200 px-6 py-4 text-sm leading-5 text-gray-500"
                   >
                     {{ $user->email }}
+                  </td>
+                  <td
+                    class="whitespace-no-wrap border-b border-gray-200 px-6 py-4 text-sm leading-5 text-gray-500"
+                  >
+                    {{ $user->logins()->latest()->first()->created_at->diffForHumans() }}
                   </td>
                   <td
                     class="whitespace-no-wrap border-b border-gray-200 px-6 py-4 text-right text-sm leading-5 font-medium"
