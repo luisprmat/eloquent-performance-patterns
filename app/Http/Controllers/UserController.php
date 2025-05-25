@@ -11,6 +11,7 @@ class UserController extends Controller
     {
         $users = User::query()
             ->with('company')
+            ->orderBy('name')
             ->simplePaginate();
 
         return view('users.index', ['users' => $users]);
