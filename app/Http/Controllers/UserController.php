@@ -16,6 +16,7 @@ class UserController extends Controller
                 ->latest()
                 ->take(1),
             ])
+            ->withCasts(['last_login_at' => 'datetime'])
             ->orderBy('name')
             ->paginate();
 

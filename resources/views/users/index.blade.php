@@ -68,7 +68,7 @@
                   <td
                     class="whitespace-no-wrap border-b border-gray-200 px-6 py-4 text-sm leading-5 text-gray-500"
                   >
-                    {{ $user->last_login_at }}
+                    {{ $user->last_login_at->diffForHumans() }}
                   </td>
                   <td
                     class="whitespace-no-wrap border-b border-gray-200 px-6 py-4 text-right text-sm leading-5 font-medium"
