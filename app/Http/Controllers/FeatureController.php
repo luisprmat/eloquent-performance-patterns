@@ -20,7 +20,7 @@ class FeatureController extends Controller
 
     public function show(Feature $feature): View
     {
-        $feature->load('comments.user');
+        $feature->load('comments.user', 'comments.feature.comments');
 
         return view('features.show', ['feature' => $feature]);
     }
