@@ -75,10 +75,10 @@
                     class="whitespace-no-wrap border-b border-gray-200 px-6 py-4 text-right text-sm leading-5 font-medium"
                   >
                     <a
-                      href="#"
+                      href="{{ route('features.show', $feature) }}"
                       class="text-indigo-600 hover:text-indigo-900 focus:underline focus:outline-hidden"
                     >
-                      {{ __('Edit') }}
+                      {{ __('View') }}
                     </a>
                   </td>
                 </tr>
