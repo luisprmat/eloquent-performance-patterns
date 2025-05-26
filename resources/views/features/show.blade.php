@@ -81,7 +81,7 @@
             {{ $comment->user->name }}
           </div>
           <div class="text-xs leading-5 text-gray-500">
-            {{ $comment->created_at->format('M j, Y \a\t g:i a') }}
+            {{ ucfirst($comment->created_at->isoFormat('MMM D, YYYY ['.__('at').'] h:mm a')) }}
           </div>
         </div>
         <div class="flex flex-1 items-center px-8">
