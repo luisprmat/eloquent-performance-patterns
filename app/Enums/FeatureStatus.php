@@ -37,4 +37,14 @@ enum FeatureStatus: string
             default => $this->value,
         };
     }
+
+    public function pluralLabel(): string
+    {
+        return match ($this) {
+            self::REQUESTED => __('features-app.plural_status.requested'),
+            self::PLANNED => __('features-app.plural_status.planned'),
+            self::COMPLETED => __('features-app.plural_status.completed'),
+            default => str($this->value)->plural(),
+        };
+    }
 }

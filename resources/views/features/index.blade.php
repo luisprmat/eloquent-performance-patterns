@@ -1,3 +1,5 @@
+@use('App\Enums\FeatureStatus')
+
 <x-app-layout>
   <x-slot:title>{{ __('Features') }}</x-slot>
 
@@ -26,6 +28,58 @@
   </header>
 
   <main class="mx-auto max-w-6xl py-12 sm:px-6 lg:px-8">
+    <div class="mb-12 grid grid-cols-3 gap-8">
+      <div
+        class="flex items-center justify-between rounded-lg bg-orange-400 px-8 py-5 shadow-sm"
+      >
+        <div class="flex items-center">
+          <svg class="h-8 w-8 fill-current text-white" viewBox="0 0 20 20">
+            <path
+              d="M10 15l-5.878 3.09 1.123-6.545L.489 6.91l6.572-.955L10 0l2.939 5.955 6.572.955-4.756 4.635 1.123 6.545z"
+            />
+          </svg>
+          <div class="ml-3 font-medium text-white">
+            {{ FeatureStatus::REQUESTED->pluralLabel() }}
+          </div>
+        </div>
+        <div class="ml-3 text-2xl font-medium text-white">
+          {{ $statuses->requested }}
+        </div>
+      </div>
+      <div
+        class="flex items-center justify-between rounded-lg bg-blue-500 px-8 py-5 shadow-sm"
+      >
+        <div class="flex items-center">
+          <svg class="h-7 w-7 fill-current text-white" viewBox="0 0 20 20">
+            <path
+              d="M6 2l2-2h4l2 2h4v2H2V2h4zM3 6h14l-1 14H4L3 6zm5 2v10h1V8H8zm3 0v10h1V8h-1z"
+            />
+          </svg>
+          <div class="ml-3 font-medium text-white">
+            {{ FeatureStatus::PLANNED->pluralLabel() }}
+          </div>
+        </div>
+        <div class="ml-3 text-2xl font-medium text-white">
+          {{ $statuses->planned }}
+        </div>
+      </div>
+      <div
+        class="flex items-center justify-between rounded-lg bg-green-400 px-8 py-5 shadow-sm"
+      >
+        <div class="flex items-center">
+          <svg class="h-8 w-8 fill-current text-white" viewBox="0 0 20 20">
+            <path d="M0 11l2-2 5 5L18 3l2 2L7 18z" />
+          </svg>
+          <div class="ml-3 font-medium text-white">
+            {{ FeatureStatus::COMPLETED->pluralLabel() }}
+          </div>
+        </div>
+        <div class="ml-3 text-2xl font-medium text-white">
+          {{ $statuses->completed }}
+        </div>
+      </div>
+    </div>
+
     <div class="flex flex-col">
       <div class="-my-2 overflow-x-auto py-2 sm:-mx-6 sm:px-6 lg:-mx-8 lg:px-8">
         <div

@@ -13,4 +13,9 @@ return [
         'planned' => 'Planned',
         'requested' => 'Requested',
     ],
+    'plural_status' => [
+        'completed' => 'Completed',
+        'planned' => 'Planned',
+        'requested' => 'Requested',
+    ],
 ];
