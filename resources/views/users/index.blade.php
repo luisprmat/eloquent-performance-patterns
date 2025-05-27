@@ -26,7 +26,36 @@
   </header>
 
   <main class="mx-auto max-w-6xl py-12 sm:px-6 lg:px-8">
-    <div class="flex flex-col">
+    <form class="max-w-lg">
+      <label for="search" class="sr-only">{{ __('Search') }}</label>
+      <div class="relative rounded-md shadow-xs">
+        <div
+          class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3"
+        >
+          <svg
+            class="h-5 w-5 text-gray-400"
+            fill="none"
+            stroke="currentColor"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            viewBox="0 0 24 24"
+          >
+            <path d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+          </svg>
+        </div>
+        <input
+          id="search"
+          name="search"
+          value="{{ request('search') }}"
+          class="form-input block w-full rounded-md border-gray-300 pl-10 shadow-xs focus:border-indigo-300 focus:ring-3 focus:ring-indigo-200/50 sm:text-sm sm:leading-5"
+          data=" "
+          placeholder="{{ __('Search') }}..."
+          autofocus
+        />
+      </div>
+    </form>
+    <div class="mt-8 flex flex-col">
       <div class="-my-2 overflow-x-auto py-2 sm:-mx-6 sm:px-6 lg:-mx-8 lg:px-8">
         <div
           class="inline-block min-w-full overflow-hidden align-middle shadow-sm sm:rounded-lg"
@@ -84,7 +113,7 @@
               @endforeach
             </tbody>
           </table>
-          {{ $users->links() }}
+          {{ $users->withQueryString()->links() }}
         </div>
       </div>
     </div>
