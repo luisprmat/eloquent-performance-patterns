@@ -74,9 +74,6 @@
               @endforeach
             </tbody>
           </table>
-        </div>
-
-        <div class="mt-2">
           {{ $users->links() }}
         </div>
       </div>
