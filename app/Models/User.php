@@ -3,6 +3,7 @@
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -50,5 +51,20 @@ class User extends Authenticatable
     public function company(): BelongsTo
     {
         return $this->belongsTo(Company::class);
+    }
+
+    public function scopeSearch(Builder $query, ?string $terms = null)
+    {
+        collect(explode(' ', $terms))->filter()->each(function ($term) use ($query) {
+            $term = '%'.$term.'%';
+
+            $query->where(function (Builder $query) use ($term) {
+                $query->where('first_name', 'like', $term)
+                    ->orWhere('last_name', 'like', $term)
+                    ->orWhereHas('company', function (Builder $query) use ($term) {
+                        $query->where('name', 'like', $term);
+                    });
+            });
+        });
     }
 }
