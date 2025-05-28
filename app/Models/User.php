@@ -6,7 +6,6 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Query\Builder as QBuilder;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
@@ -63,11 +62,10 @@ class User extends Authenticatable
                 $query->where(function (Builder $query) use ($term) {
                     $query->where('first_name', 'like', $term)
                         ->orWhere('last_name', 'like', $term)
-                        ->orWhereIn('company_id', function (QBuilder $query) use ($term) {
-                            $query->select('id')
-                                ->from('companies')
-                                ->where('name', 'like', $term);
-                        });
+                        ->orWhereIn('company_id', Company::query()
+                            ->where('name', 'like', $term)
+                            ->pluck('id')
+                        );
                 });
             });
         }
@@ -79,11 +77,10 @@ class User extends Authenticatable
                 $query->where(function (Builder $query) use ($term) {
                     $query->where('first_name', 'ilike', $term)
                         ->orWhere('last_name', 'ilike', $term)
-                        ->orWhereIn('company_id', function (QBuilder $query) use ($term) {
-                            $query->select('id')
-                                ->from('companies')
-                                ->where('name', 'ilike', $term);
-                        });
+                        ->orWhereIn('company_id', Company::query()
+                            ->where('name', 'ilike', $term)
+                            ->pluck('id')
+                        );
                 });
             });
         }
