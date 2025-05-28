@@ -55,8 +55,8 @@ class User extends Authenticatable
 
     public function scopeSearch(Builder $query, ?string $terms = null)
     {
-        collect(explode(' ', $terms))->filter()->each(function ($term) use ($query) {
-            $term = '%'.$term.'%';
+        collect(str_getcsv($terms, ' ', escape: '\\'))->filter()->each(function ($term) use ($query) {
+            $term = $term.'%';
 
             $query->where(function (Builder $query) use ($term) {
                 $query->where('first_name', 'like', $term)
