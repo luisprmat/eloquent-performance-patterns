@@ -3,9 +3,11 @@
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
+
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Query\Builder as QBuilder;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
@@ -59,13 +61,21 @@ class User extends Authenticatable
             collect(str_getcsv($terms, ' ', escape: '\\'))->filter()->each(function ($term) use ($query) {
                 $term = $term.'%';
 
-                $query->where(function (Builder $query) use ($term) {
-                    $query->where('first_name', 'like', $term)
-                        ->orWhere('last_name', 'like', $term)
-                        ->orWhereIn('company_id', Company::query()
-                            ->where('name', 'like', $term)
-                            ->pluck('id')
-                        );
+                $query->whereIn('id', function (QBuilder $query) use ($term) {
+                    $query->select('id')
+                        ->from(function (QBuilder $query) use ($term) {
+                            $query->select('id')
+                                ->from('users')
+                                ->where('first_name', 'like', $term)
+                                ->orWhere('last_name', 'like', $term)
+                                ->union(
+                                    $query->newQuery()
+                                        ->select('users.id')
+                                        ->from('users')
+                                        ->join('companies', 'users.company_id', '=', 'companies.id')
+                                        ->where('companies.name', 'like', $term)
+                                );
+                        }, 'matches');
                 });
             });
         }
@@ -74,13 +84,21 @@ class User extends Authenticatable
             collect(str_getcsv($terms, ' ', escape: '\\'))->filter()->each(function ($term) use ($query) {
                 $term = $term.'%';
 
-                $query->where(function (Builder $query) use ($term) {
-                    $query->where('first_name', 'ilike', $term)
-                        ->orWhere('last_name', 'ilike', $term)
-                        ->orWhereIn('company_id', Company::query()
-                            ->where('name', 'ilike', $term)
-                            ->pluck('id')
-                        );
+                $query->whereIn('id', function (QBuilder $query) use ($term) {
+                    $query->select('id')
+                        ->from(function (QBuilder $query) use ($term) {
+                            $query->select('id')
+                                ->from('users')
+                                ->where('first_name', 'ilike', $term)
+                                ->orWhere('last_name', 'ilike', $term)
+                                ->union(
+                                    $query->newQuery()
+                                        ->select('users.id')
+                                        ->from('users')
+                                        ->join('companies', 'users.company_id', '=', 'companies.id')
+                                        ->where('companies.name', 'ilike', $term)
+                                );
+                        }, 'matches');
                 });
             });
         }
