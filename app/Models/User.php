@@ -56,18 +56,36 @@ class User extends Authenticatable
 
     public function scopeSearch(Builder $query, ?string $terms = null)
     {
-        collect(str_getcsv($terms, ' ', escape: '\\'))->filter()->each(function ($term) use ($query) {
-            $term = $term.'%';
+        if (config('database.default') === 'mysql' || config('database.default') === 'sqlite') {
+            collect(str_getcsv($terms, ' ', escape: '\\'))->filter()->each(function ($term) use ($query) {
+                $term = $term.'%';
 
-            $query->where(function (Builder $query) use ($term) {
-                $query->where('first_name', 'like', $term)
-                    ->orWhere('last_name', 'like', $term)
-                    ->orWhereIn('company_id', function (QBuilder $query) use ($term) {
-                        $query->select('id')
-                            ->from('companies')
-                            ->where('name', 'like', $term);
-                    });
+                $query->where(function (Builder $query) use ($term) {
+                    $query->where('first_name', 'like', $term)
+                        ->orWhere('last_name', 'like', $term)
+                        ->orWhereIn('company_id', function (QBuilder $query) use ($term) {
+                            $query->select('id')
+                                ->from('companies')
+                                ->where('name', 'like', $term);
+                        });
+                });
             });
-        });
+        }
+
+        if (config('database.default') === 'pgsql') {
+            collect(str_getcsv($terms, ' ', escape: '\\'))->filter()->each(function ($term) use ($query) {
+                $term = $term.'%';
+
+                $query->where(function (Builder $query) use ($term) {
+                    $query->where('first_name', 'ilike', $term)
+                        ->orWhere('last_name', 'ilike', $term)
+                        ->orWhereIn('company_id', function (QBuilder $query) use ($term) {
+                            $query->select('id')
+                                ->from('companies')
+                                ->where('name', 'ilike', $term);
+                        });
+                });
+            });
+        }
     }
 }
