@@ -59,21 +59,21 @@ class User extends Authenticatable
     {
         if (config('database.default') === 'mysql' || config('database.default') === 'sqlite') {
             collect(str_getcsv($terms, ' ', escape: '\\'))->filter()->each(function ($term) use ($query) {
-                $term = $term.'%';
+                $term = preg_replace('/[^A-Za-z0-9]/', '', $term).'%';
 
                 $query->whereIn('id', function (QBuilder $query) use ($term) {
                     $query->select('id')
                         ->from(function (QBuilder $query) use ($term) {
                             $query->select('id')
                                 ->from('users')
-                                ->where('first_name', 'like', $term)
-                                ->orWhere('last_name', 'like', $term)
+                                ->whereRaw("regexp_replace(first_name, '[^A-Za-z0-9]', '') like ?", [$term])
+                                ->OrWhereRaw("regexp_replace(last_name, '[^A-Za-z0-9]', '') like ?", [$term])
                                 ->union(
                                     $query->newQuery()
                                         ->select('users.id')
                                         ->from('users')
                                         ->join('companies', 'users.company_id', '=', 'companies.id')
-                                        ->where('companies.name', 'like', $term)
+                                        ->whereRaw("regexp_replace(companies.name, '[^A-Za-z0-9]', '') like ?", [$term])
                                 );
                         }, 'matches');
                 });
@@ -89,14 +89,14 @@ class User extends Authenticatable
                         ->from(function (QBuilder $query) use ($term) {
                             $query->select('id')
                                 ->from('users')
-                                ->where('first_name', 'ilike', $term)
-                                ->orWhere('last_name', 'ilike', $term)
+                                ->whereRaw("regexp_replace(first_name, '[^A-Za-z0-9]', '') ilike ?", [$term])
+                                ->OrWhereRaw("regexp_replace(last_name, '[^A-Za-z0-9]', '') ilike ?", [$term])
                                 ->union(
                                     $query->newQuery()
                                         ->select('users.id')
                                         ->from('users')
                                         ->join('companies', 'users.company_id', '=', 'companies.id')
-                                        ->where('companies.name', 'ilike', $term)
+                                        ->whereRaw("regexp_replace(companies.name, '[^A-Za-z0-9]', '') ilike ?", [$term])
                                 );
                         }, 'matches');
                 });
