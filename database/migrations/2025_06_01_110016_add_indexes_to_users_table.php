@@ -12,8 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('users', function (Blueprint $table) {
-            $table->index('first_name');
-            $table->index('last_name');
+            $table->index(['last_name', 'first_name']);
         });
     }
 
@@ -23,8 +22,7 @@ return new class extends Migration
     public function down(): void
     {
         Schema::table('users', function (Blueprint $table) {
-            $table->dropIndex(['last_name']);
-            $table->dropIndex(['first_name']);
+            $table->dropIndex(['last_name', 'first_name']);
         });
     }
 };
