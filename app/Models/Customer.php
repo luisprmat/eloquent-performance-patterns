@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -14,5 +15,12 @@ class Customer extends Model
     public function salesRep(): BelongsTo
     {
         return $this->belongsTo(User::class);
+    }
+
+    public function scopeVisibleTo(Builder $query, User $user): void
+    {
+        if ($user->is_owner) return;
+
+        $query->where('sales_rep_id', $user->id);
     }
 }
