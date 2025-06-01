@@ -17,7 +17,8 @@ class CustomerController extends Controller
         $customers = Customer::query()
             ->with('salesRep')
             ->orderBy('name')
-            ->paginate();
+            ->get()
+            ->filter(fn ($customer) => Auth::user()->can('view', $customer));
 
         return view('customers.index', ['customers' => $customers]);
     }
