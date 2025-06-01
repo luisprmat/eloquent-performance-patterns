@@ -2,7 +2,7 @@
 
 namespace Database\Seeders;
 
-use App\Models\Company;
+use App\Models\Customer;
 use App\Models\User;
 use Illuminate\Database\Seeder;
 
@@ -13,7 +13,12 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        Company::factory(1000)->create()->each(fn (Company $company) => $company->users()
-            ->createMany(User::factory(50)->make()->map->getAttributes()));
+        User::factory()->isOwner()->create(['name' => 'Ted Bossman']);
+        User::factory()->create(['name' => 'Sarah Seller']);
+        User::factory()->create(['name' => 'Chase Indeals']);
+
+        User::all()->each(fn (User $user) => $user->customers()
+            ->createMany(Customer::factory()->count(25)->make()->toArray())
+        );
     }
 }
