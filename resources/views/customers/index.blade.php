@@ -54,42 +54,44 @@
             </thead>
             <tbody>
               @foreach ($customers as $customer)
-                <tr class="bg-white">
-                  <td
-                    class="whitespace-no-wrap border-b border-gray-200 px-6 py-4 text-sm leading-5 font-medium text-gray-900"
-                  >
-                    {{ $customer->name }}
-                  </td>
-                  <td
-                    class="whitespace-no-wrap border-b border-gray-200 px-6 py-4 text-sm leading-5 text-gray-500"
-                  >
-                    {{ $customer->city }}, {{ $customer->state }}
-                  </td>
-                  <td
-                    class="whitespace-no-wrap border-b border-gray-200 px-6 py-4 text-sm leading-5 text-gray-500"
-                  >
-                    <div class="flex items-center">
-                      <div>{{ $customer->salesRep->name }}</div>
-                      @if ($customer->salesRep->is_owner)
-                        <div
-                          class="ml-2 inline-flex rounded-full bg-green-100 px-2 text-xs leading-5 font-semibold text-green-800"
-                        >
-                          {{ __('Owner') }}
-                        </div>
-                      @endif
-                    </div>
-                  </td>
-                  <td
-                    class="whitespace-no-wrap border-b border-gray-200 px-6 py-4 text-right text-sm leading-5 font-medium"
-                  >
-                    <a
-                      href="#"
-                      class="text-indigo-600 hover:text-indigo-900 focus:underline focus:outline-hidden"
+                @can('view', $customer)
+                  <tr class="bg-white">
+                    <td
+                      class="whitespace-no-wrap border-b border-gray-200 px-6 py-4 text-sm leading-5 font-medium text-gray-900"
                     >
-                      {{ __('Edit') }}
-                    </a>
-                  </td>
-                </tr>
+                      {{ $customer->name }}
+                    </td>
+                    <td
+                      class="whitespace-no-wrap border-b border-gray-200 px-6 py-4 text-sm leading-5 text-gray-500"
+                    >
+                      {{ $customer->city }}, {{ $customer->state }}
+                    </td>
+                    <td
+                      class="whitespace-no-wrap border-b border-gray-200 px-6 py-4 text-sm leading-5 text-gray-500"
+                    >
+                      <div class="flex items-center">
+                        <div>{{ $customer->salesRep->name }}</div>
+                        @if ($customer->salesRep->is_owner)
+                          <div
+                            class="ml-2 inline-flex rounded-full bg-green-100 px-2 text-xs leading-5 font-semibold text-green-800"
+                          >
+                            {{ __('Owner') }}
+                          </div>
+                        @endif
+                      </div>
+                    </td>
+                    <td
+                      class="whitespace-no-wrap border-b border-gray-200 px-6 py-4 text-right text-sm leading-5 font-medium"
+                    >
+                      <a
+                        href="#"
+                        class="text-indigo-600 hover:text-indigo-900 focus:underline focus:outline-hidden"
+                      >
+                        {{ __('Edit') }}
+                      </a>
+                    </td>
+                  </tr>
+                @endcan
               @endforeach
             </tbody>
           </table>
