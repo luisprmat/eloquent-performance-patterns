@@ -21,14 +21,28 @@
                 />
               </svg>
               <span class="ml-2 text-xl font-bold text-white">
-                {{ __('Clients') }}
+                {{ __('Library') }}
               </span>
             </div>
             <div class="hidden md:block">
               <div class="ml-10 flex items-baseline">
                 <a
-                  href="/"
-                  class="rounded-md bg-gray-900 px-3 py-2 text-sm font-medium text-white focus:bg-gray-700 focus:text-white focus:outline-hidden"
+                  href="{{ route('books') }}"
+                  @class([
+                      'rounded-md px-3 py-2 text-sm font-medium focus:bg-gray-700 focus:text-white focus:outline-hidden',
+                      'bg-gray-900 font-bold text-white' => request()->routeIs('books'),
+                      'text-gray-300 hover:bg-gray-700 hover:text-white' => ! request()->routeIs('books'),
+                  ])
+                >
+                  {{ __('Books') }}
+                </a>
+                <a
+                  href="{{ route('users') }}"
+                  @class([
+                      'ml-4 rounded-md px-3 py-2 text-sm font-medium focus:bg-gray-700 focus:text-white focus:outline-hidden',
+                      'bg-gray-900 font-bold text-white' => request()->routeIs('users*'),
+                      'text-gray-300 hover:bg-gray-700 hover:text-white' => ! request()->routeIs('users*'),
+                  ])
                 >
                   {{ __('Users') }}
                 </a>
@@ -36,13 +50,7 @@
                   href="#"
                   class="ml-4 rounded-md px-3 py-2 text-sm font-medium text-gray-300 hover:bg-gray-700 hover:text-white focus:bg-gray-700 focus:text-white focus:outline-hidden"
                 >
-                  {{ __('Companies') }}
-                </a>
-                <a
-                  href="#"
-                  class="ml-4 rounded-md px-3 py-2 text-sm font-medium text-gray-300 hover:bg-gray-700 hover:text-white focus:bg-gray-700 focus:text-white focus:outline-hidden"
-                >
-                  {{ __('Settings') }}
+                  {{ __('Categories') }}
                 </a>
               </div>
             </div>
