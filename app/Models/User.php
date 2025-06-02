@@ -68,4 +68,13 @@ class User extends Authenticatable
             ->take(1),
         ])->with('lastLogin');
     }
+
+    public function scopeOrderByLastLogin(Builder $query): void
+    {
+        $query->orderByDesc(Login::select('created_at')
+            ->whereColumn('user_id', 'users.id')
+            ->latest()
+            ->take(1)
+        );
+    }
 }
