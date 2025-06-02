@@ -10,7 +10,10 @@ class UserController extends Controller
     public function index(): View
     {
         $users = User::query()
-            ->orderBy('name')
+            ->select('users.*')
+            ->join('logins', 'logins.user_id', '=', 'users.id')
+            ->groupBy('users.id')
+            ->orderByRaw('max(logins.created_at) desc')
             ->withLastLogin()
             ->paginate();
 
