@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Book;
+use App\Models\Checkout;
 use Illuminate\View\View;
 
 class BookController extends Controller
@@ -10,10 +11,11 @@ class BookController extends Controller
     public function index(): View
     {
         $books = Book::query()
-            ->select('books.*')
-            ->join('checkouts', 'checkouts.book_id', '=', 'books.id')
-            ->groupBy('books.id')
-            ->orderByRaw('max(checkouts.borrowed_date) desc')
+            ->orderByDesc(Checkout::select('borrowed_date')
+                ->whereColumn('book_id', 'books.id')
+                ->latest('borrowed_date')
+                ->take(1)
+            )
             ->withLastCheckout()
             ->with('lastCheckout.user')
             ->paginate();
