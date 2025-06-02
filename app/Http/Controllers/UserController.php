@@ -10,7 +10,9 @@ class UserController extends Controller
     public function index(): View
     {
         $users = User::query()
-            ->orderBy('name')
+            ->select('users.*')
+            ->join('companies', 'companies.user_id', '=', 'users.id')
+            ->orderBy('companies.name')
             ->with('company')
             ->paginate();
 
