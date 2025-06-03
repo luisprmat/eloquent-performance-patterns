@@ -11,6 +11,7 @@ class BookController extends Controller
     {
         $books = Book::query()
             ->with('user')
+            ->orderByRaw('user_id is null')
             ->orderBy('name')
             ->paginate();
 
