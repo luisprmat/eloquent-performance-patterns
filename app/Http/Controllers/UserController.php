@@ -12,8 +12,14 @@ class UserController extends Controller
     {
         $users = User::query()
             ->when(request('sort') === 'town', function (Builder $query) {
-                $query->orderByRaw('town is null')
-                    ->orderBy('town', request('direction'));
+                if (config('database.default') === 'mysql' || config('database.default') === 'sqlite') {
+                    $query->orderByRaw('town is null')
+                        ->orderBy('town', request('direction'));
+                }
+
+                if (config('database.default') === 'pgsql') {
+                    $query->orderByRaw('town '.request('direction').' nulls last');
+                }
             })
             ->orderBy('name')
             ->paginate();
