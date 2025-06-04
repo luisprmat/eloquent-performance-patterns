@@ -37,17 +37,29 @@
                 <th
                   class="w-1/2 border-b border-gray-200 bg-gray-50 px-6 py-3 text-left text-xs leading-4 font-medium tracking-wider text-gray-500 uppercase"
                 >
-                  {{ __('Title') }}
+                  <x-order-by-column route-name="features.index" column="title">
+                    {{ __('Title') }}
+                  </x-order-by-column>
                 </th>
                 <th
                   class="w-1/4 border-b border-gray-200 bg-gray-50 px-6 py-3 text-left text-xs leading-4 font-medium tracking-wider text-gray-500 uppercase"
                 >
-                  {{ __('Status') }}
+                  <x-order-by-column
+                    route-name="features.index"
+                    column="status"
+                  >
+                    {{ __('Status') }}
+                  </x-order-by-column>
                 </th>
                 <th
                   class="w-1/4 border-b border-gray-200 bg-gray-50 px-6 py-3 text-left text-xs leading-4 font-medium tracking-wider text-gray-500 uppercase"
                 >
-                  {{ __('Activity') }}
+                  <x-order-by-column
+                    route-name="features.index"
+                    column="activity"
+                  >
+                    {{ __('Activity') }}
+                  </x-order-by-column>
                 </th>
                 <th class="border-b border-gray-200 bg-gray-50 px-6 py-3"></th>
               </tr>
@@ -125,7 +137,7 @@
               @endforeach
             </tbody>
           </table>
-          {{ $features->links() }}
+          {{ $features->withQueryString()->links() }}
         </div>
       </div>
     </div>
