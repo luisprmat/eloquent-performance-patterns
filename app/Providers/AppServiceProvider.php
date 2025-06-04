@@ -3,6 +3,7 @@
 namespace App\Providers;
 
 use App\Pagination\Paginator;
+use Illuminate\Database\Query\Builder;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\ServiceProvider;
 
@@ -30,6 +31,13 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        //
+        // Use if connection is postgres
+        Builder::macro('orderByNullsLast', function ($column, $direction = 'asc') {
+            /** @var Builder $this */
+            $column = $this->getGrammar()->wrap($column);
+            $direction = strtolower($direction) === 'asc' ? 'asc' : 'desc';
+
+            return $this->orderByRaw("$column $direction nulls last");
+        });
     }
 }

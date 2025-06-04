@@ -3,8 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
-use Illuminate\View\View;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\View\View;
 
 class UserController extends Controller
 {
@@ -18,8 +18,7 @@ class UserController extends Controller
                 }
 
                 if (config('database.default') === 'pgsql') {
-                    $direction = strtolower(request('direction')) === 'asc' ? 'asc' : 'desc';
-                    $query->orderByRaw('town '.$direction.' nulls last');
+                    $query->orderByNullsLast('town', request('direction'));
                 }
             })
             ->orderBy('name')
