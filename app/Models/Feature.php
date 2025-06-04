@@ -3,9 +3,11 @@
 namespace App\Models;
 
 use App\Enums\FeatureStatus;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Support\Facades\DB;
 
 class Feature extends Model
 {
@@ -32,5 +34,24 @@ class Feature extends Model
     public function votes(): HasMany
     {
         return $this->hasMany(Vote::class);
+    }
+
+    public function scopeOrderByStatus(Builder $query, string $direction): void
+    {
+        $query->orderBy(DB::raw('
+            case
+                when status = "Requested" then 1
+                when status = "Approved" then 2
+                when status = "Completed" then 3
+            end
+        '), $direction);
+    }
+
+    public function scopeOrderByActivity(Builder $query, string $direction): void
+    {
+        $query->orderBy(
+            DB::raw('-(votes_count + (comments_count * 2))'),
+            $direction
+        );
     }
 }

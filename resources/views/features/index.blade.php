@@ -116,11 +116,9 @@
                           {{ $feature->comments_count }}
                         </div>
                       </div>
-                      {{--
-                        <div class="ml-2 text-orange-500">
+                      <div class="ml-2 text-orange-500">
                         ({{ $feature->votes_count + ($feature->comments_count * 2) }})
-                        </div>
-                      --}}
+                      </div>
                     </div>
                   </td>
                   <td
