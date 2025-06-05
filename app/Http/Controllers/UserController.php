@@ -10,6 +10,7 @@ class UserController extends Controller
     public function index(): View
     {
         $users = User::query()
+            ->orderByBirthday()
             ->orderBy('name')
             ->paginate();
 
