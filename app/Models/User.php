@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Carbon;
 
 class User extends Authenticatable
 {
@@ -66,6 +67,8 @@ class User extends Authenticatable
 
     public function scopeWhereBirthdayThisWeek(Builder $query): void
     {
+        // Carbon::setTestNow(Carbon::parse('January 1, 2025'));
+
         $dates = now()->startOfWeek()
             ->daysUntil(now()->endOfWeek())
             ->map(fn ($date) => $date->format('m-d'));
@@ -80,6 +83,29 @@ class User extends Authenticatable
 
         if (config('database.default') === 'pgsql') {
             $query->whereRaw('to_birthday(birth_date) in (?,?,?,?,?,?,?)', iterator_to_array($dates));
+        }
+    }
+
+    public function scopeOrderByUpcomingBirthdays($query)
+    {
+        if (config('database.default') === 'mysql') {
+            $query->orderByRaw('
+                case
+                    when (birth_date + interval (year(?) - year(birth_date)) year) >= ?
+                    then (birth_date + interval (year(?) - year(birth_date)) year)
+                    else (birth_date + interval (year(?) - year(birth_date)) + 1 year)
+                end
+            ', [
+                array_fill(0, 4, Carbon::now()->startOfWeek()->toDateString()),
+            ]);
+        }
+
+        if (config('database.default') === 'sqlite') {
+            throw new \Exception('This scope does not support SQLite.');
+        }
+
+        if (config('database.default') === 'pgsql') {
+            throw new \Exception('This scope does not support Postgres.');
         }
     }
 }

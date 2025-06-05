@@ -11,7 +11,8 @@ class UserController extends Controller
     {
         $users = User::query()
             ->whereBirthdayThisWeek()
-            ->orderByBirthday()
+            // ->orderByBirthday()
+            ->orderByUpcomingBirthdays()
             ->orderBy('name')
             ->paginate();
 
