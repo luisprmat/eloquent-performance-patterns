@@ -63,4 +63,23 @@ class User extends Authenticatable
             $query->orderByRaw('to_birthday(birth_date)');
         }
     }
+
+    public function scopeWhereBirthdayThisWeek(Builder $query): void
+    {
+        $dates = now()->startOfWeek()
+            ->daysUntil(now()->endOfWeek())
+            ->map(fn ($date) => $date->format('m-d'));
+
+        if (config('database.default') === 'mysql') {
+            $query->whereRaw('date_format(birth_date, "%m-%d") in (?,?,?,?,?,?,?)', iterator_to_array($dates));
+        }
+
+        if (config('database.default') === 'sqlite') {
+            $query->whereRaw('strftime("%m-%d", birth_date) in (?,?,?,?,?,?,?)', iterator_to_array($dates));
+        }
+
+        if (config('database.default') === 'pgsql') {
+            $query->whereRaw('to_birthday(birth_date) in (?,?,?,?,?,?,?)', iterator_to_array($dates));
+        }
+    }
 }
