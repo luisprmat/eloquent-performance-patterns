@@ -10,6 +10,7 @@ class CustomerController extends Controller
     public function index(): View
     {
         $customers = Customer::query()
+            // ->with('salesRep')
             ->orderBy('name')
             ->paginate();
 
