@@ -10,7 +10,7 @@ class DeviceController extends Controller
     public function index(): View
     {
         $devices = Device::query()
-            ->orderBy('name')
+            ->orderByRaw('naturalsort(name)')
             ->paginate();
 
         return view('devices.index', ['devices' => $devices]);
