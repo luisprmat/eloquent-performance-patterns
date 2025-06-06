@@ -21,7 +21,7 @@
                 />
               </svg>
               <span class="ml-2 text-xl font-bold text-white">
-                {{ __('Clients') }}
+                {{ __('Blog') }}
               </span>
             </div>
             <div class="hidden md:block">
@@ -30,19 +30,19 @@
                   href="/"
                   class="rounded-md bg-gray-900 px-3 py-2 text-sm font-medium text-white focus:bg-gray-700 focus:text-white focus:outline-hidden"
                 >
-                  {{ __('Users') }}
+                  {{ __('Posts') }}
                 </a>
                 <a
                   href="#"
                   class="ml-4 rounded-md px-3 py-2 text-sm font-medium text-gray-300 hover:bg-gray-700 hover:text-white focus:bg-gray-700 focus:text-white focus:outline-hidden"
                 >
-                  {{ __('Companies') }}
+                  {{ __('Authors') }}
                 </a>
                 <a
                   href="#"
                   class="ml-4 rounded-md px-3 py-2 text-sm font-medium text-gray-300 hover:bg-gray-700 hover:text-white focus:bg-gray-700 focus:text-white focus:outline-hidden"
                 >
-                  {{ __('Settings') }}
+                  {{ __('Categories') }}
                 </a>
               </div>
             </div>
