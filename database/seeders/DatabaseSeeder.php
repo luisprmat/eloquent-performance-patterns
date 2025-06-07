@@ -23,7 +23,19 @@ class DatabaseSeeder extends Seeder
             'city' => $store[1],
             'state' => $store[2],
             'postal' => $store[3],
-            'location' => DB::raw('ST_SRID(Point('.$store[4].', '.$store[5].'), 4326)'),
+            'location' => (function () use ($store) {
+                    if (config('database.default') === 'mysql') {
+                        return DB::raw('ST_SRID(Point('.$store[4].', '.$store[5].'), 4326)');
+                    }
+
+                    if (config('database.default') === 'sqlite') {
+                        throw new \Exception('This lesson does not support SQLite.');
+                    }
+
+                    if (config('database.default') === 'pgsql') {
+                        return DB::raw('ST_MakePoint('.$store[4].', '.$store[5].')');
+                    }
+                })(),
         ]));
     }
 }
