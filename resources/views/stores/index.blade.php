@@ -44,6 +44,11 @@
                 >
                   {{ __('City') }}
                 </th>
+                <th
+                  class="border-b border-gray-200 bg-gray-50 px-6 py-3 text-left text-xs leading-4 font-medium tracking-wider text-gray-500 uppercase"
+                >
+                  {{ __('Distance') }}
+                </th>
                 <th class="border-b border-gray-200 bg-gray-50 px-6 py-3"></th>
               </tr>
             </thead>
@@ -59,6 +64,12 @@
                     class="whitespace-no-wrap border-b border-gray-200 px-6 py-4 text-sm leading-5 text-gray-500"
                   >
                     {{ $store->city }}, {{ $store->state }}
+                  </td>
+                  <td
+                    class="whitespace-no-wrap border-b border-gray-200 px-6 py-4 text-sm leading-5 text-gray-500"
+                  >
+                    {{ Number::format($store->distance / 1_000, precision: 2) }}
+                    km
                   </td>
                   <td
                     class="whitespace-no-wrap border-b border-gray-200 px-6 py-4 text-right text-sm leading-5 font-medium"
