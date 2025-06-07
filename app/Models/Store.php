@@ -14,19 +14,46 @@ class Store extends Model
             $query->select('*');
         }
 
-        /** @var QBuilder $query */
-        $query->selectRaw('ST_Distance(
-            location,
-            ST_SRID(Point(?, ?), 4326)
-        ) as distance', $coordinates);
+        if (config('database.default') === 'mysql') {
+            /** @var QBuilder $query */
+            $query->selectRaw('ST_Distance(
+                location,
+                ST_SRID(Point(?, ?), 4326)
+            ) as distance', $coordinates);
+        }
+
+        if (config('database.default') === 'sqlite') {
+            throw new \Exception('This lesson does not support SQLite.');
+        }
+
+        if (config('database.default') === 'pgsql') {
+            $query->selectRaw('ST_Distance(
+                location,
+                ST_MakePoint(?, ?)::geography
+            ) as distance', $coordinates);
+        }
     }
 
     public function scopeWithinDistanceTo(Builder $query, array $coordinates, int $distance): void
     {
-        /** @var QBuilder $query */
-        $query->whereRaw('ST_Distance(
-            location,
-            ST_SRID(Point(?, ?), 4326)
-        ) <= ?', [...$coordinates, $distance]);
+        if (config('database.default') === 'mysql') {
+            /** @var QBuilder $query */
+            $query->whereRaw('ST_Distance(
+                location,
+                ST_SRID(Point(?, ?), 4326)
+            ) <= ?', [...$coordinates, $distance]);
+        }
+
+        if (config('database.default') === 'sqlite') {
+            throw new \Exception('This lesson does not support SQLite.');
+        }
+
+        if (config('database.default') === 'pgsql') {
+            $query->whereRaw('ST_DWithin(
+                location,
+                ST_MakePoint(?, ?)::geography,
+                ?
+            )', [...$coordinates, $distance]);
+        }
     }
 }
