@@ -14,6 +14,7 @@ class StoreController extends Controller
         $stores = Store::query()
             ->selectDistanceTo($myLocation)
             ->withinDistanceTo($myLocation, 10_000) // 10 km
+            ->orderByDistanceTo($myLocation)
             ->paginate();
 
         return view('stores.index', ['stores' => $stores]);
