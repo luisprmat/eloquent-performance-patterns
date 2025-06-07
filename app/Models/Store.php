@@ -16,7 +16,7 @@ class Store extends Model
 
         /** @var QBuilder $query */
         $query->selectRaw('ST_Distance(
-            ST_SRID(Point(longitude, latitude), 4326),
+            location,
             ST_SRID(Point(?, ?), 4326)
         ) as distance', $coordinates);
     }
@@ -25,7 +25,7 @@ class Store extends Model
     {
         /** @var QBuilder $query */
         $query->whereRaw('ST_Distance(
-            ST_SRID(Point(longitude, latitude), 4326),
+            location,
             ST_SRID(Point(?, ?), 4326)
         ) <= ?', [...$coordinates, $distance]);
     }
